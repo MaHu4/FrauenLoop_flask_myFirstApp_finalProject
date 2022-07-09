@@ -11,7 +11,7 @@ Also, through this guide:
 
 - You setup a Heroku account and can deploy your project there, also from the start.
 - You will create a Postgres DB within Heroku, so you do not need to run a DB engine locally on your machine.
-- The template includes sample code to show a Google Map and some markers in it
+- The template includes sample code to show an Esri/ArcGIS Map and some markers in it
 - The template also includes a sample model with some prestored locations, just to test out the map functionality and make sure PostGis extension works too.
 
 The idea is you use this to get a first working version of these basic functionalities, and then start changing things to build your own app.
@@ -24,13 +24,15 @@ If you are running on a Mac or some different setup, some stuff might be slightl
 
 ## Prerequisites
 
-- A GitHub account and a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) so you can commit stuff from the command line
-- Git installed in your machine so you can execute git commands
-- Python installed in your machine so you can execute Python commands and run Pyton scripts. Make sure you have version **3.6 or superior**. You also need to use pip, can't remember if that needed to be installed separately.
-- A Google Maps API Key
-- Might be needed: A local installation of [Postgres](https://www.postgresql.org/download/): The instructions given here will allow you to connect to the DB hosted in Heroku, even when you are running locally. Regardless, there are a few steps that may not work if you have no local Postgres installed. These are: 
-  - the install of dependency `psycopg2` (you can workaround this one by installing `psycopg2-binary` instead)
-  - Connecting to the Heroku db by using `heroku pg:psql`. To ensure this step will work fine, try executing the command `psql` from your command line. If the command is found, even when you see some error in connection to server or similar, you are OK. Only if the command is not found / recognized, then you might need to install Postgres / add this to your PATH. 
+Prerequisites
+A GitHub account and a personal access token so you can commit stuff from the command line
+Git installed in your machine so you can execute git commands
+Python installed in your machine so you can execute Python commands and run Pyton scripts. Make sure you have version 3.6 or superior. You also need to use pip, can't remember if that needed to be installed separately.
+An Esri Maps API Key (You can get one here: https://developers.arcgis.com/javascript/latest/get-started/#2-get-an-api-key)
+Might be needed: A local installation of Postgres: The instructions given here will allow you to connect to the DB hosted in Heroku, even when you are running locally. Regardless, there are a few steps that may not work if you have no local Postgres installed. These are:
+the install of dependency psycopg2 (you can workaround this one by installing psycopg2-binary instead)
+Connecting to the Heroku db by using heroku pg:psql. To ensure this step will work fine, try executing the command psql from your command line. If the command is found, even when you see some error in connection to server or similar, you are OK. Only if the command is not found / recognized, then you might need to install Postgres / add this to your PATH.
+
 
 ## Initializing the Project
 
@@ -147,8 +149,9 @@ The Heroku command-line interface (CLI) is a tool that allows you to create and 
 
 **Mac / Linux**
 ```
-curl https://cli-assets.heroku.com/install.sh | sh
+curl https://cli-assets.heroku.com/install.sh | sh 
 ```
+Added notes: Because I get a permission denied error trying to read or change/write/execute a file in my local filesystem, I needed to run the same command with the sudo prefix.The rationale here is that sudo gives me administrator / super user powers to be able to modify all files in my computer. 
 
 **Windows**
 Download the cli executable from here: https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli
@@ -207,6 +210,7 @@ Now, we want to add a PostGres database to our app (hobby-dev is the free versio
 heroku addons:create heroku-postgresql:hobby-dev
 ```
 
+
 You should see an output similar to this:
 
 ```
@@ -246,6 +250,8 @@ Now you should be ready to try again:
 heroku pg:psql postgresql-parallel-63698  <<< replace with your db name
 ```
 
+Added note: my database name =  postgresql-shallow-84563
+
 Once the `pg:sql` command works, you will find yourself 'inside' a psql command line where you can run commands against your database. Run the following:
 
 ```
@@ -273,7 +279,8 @@ First, you want to get the app running locally, because if something did not wor
 To run the sample code you copied from this template, two environment variables need to be set:
 
 - DATABASE_URL: this is the connection string for the PostGres database. Because the DB is hosted by Heroku, it also defines the user / password / etc for us. And these are 'ephemeral' credentials that heroku will rotate periodically to make your db more secure. We don't know how often the credentials change, but we should assume they will, so no hardcoding these anywhere. To get the proper value you can use the heroku cli, and below you get a bit of command line magic to directly put that into a local env variable.
-- GOOGLE_MAPS_API_KEY: You need to get this for yourself (via the Google app console). It will be sent to the Google Maps API to render the map on the initial page of the sample app.
+- MAPS_API_KEY: You need to get this for yourself (via the Esri developer console). It will be sent to the Maps API to render the map on the initial page of the sample app and any place where a map is used.
+
 
 To get the data you need to set DATABASE_URL, run:
 
@@ -281,6 +288,7 @@ To get the data you need to set DATABASE_URL, run:
 ```
 heroku pg:credentials:url postgresql-parallel-63698 <<<< replace this with YOUR database name from previous steps
 ```
+Added note: my database name = postgresql-shallow-84563
 
 This will output something like this:
 
@@ -292,6 +300,17 @@ Connection URL:
    postgres://XXXXXXX:YYYYYYYYYYYYYYYYYYYYYYY@ec2-XXX-XXX-XXX-XXX.compute-X.amazonaws.com:XXXX/XXXXXXXXXXXXXXX
 ```
 
+    #####
+Added note: Output in my terminal:
+
+Connection information for default credential.
+Connection info string:
+   "dbname=d3l0e2vbigq9mf host=ec2-34-233-115-14.compute-1.amazonaws.com port=5432 user=vbmiemmukbxdln password=79dceec5c1ffdebe87534fd8d9d22df925e3ed27e42f616f1ef73312604f31f6 sslmode=require"
+Connection URL:
+   postgres://vbmiemmukbxdln:79dceec5c1ffdebe87534fd8d9d22df925e3ed27e42f616f1ef73312604f31f6@ec2-34-233-115-14.compute-1.amazonaws.com:5432/d3l0e2vbigq9mf
+
+   ###
+
 What we want to set as `DATABASE_URL` is the value shown as Connection URL, that starts with 'postgres://'
 You can copy that value from the output and use it to set the variable. 
 
@@ -300,91 +319,68 @@ To set the environment variables run:
 **Mac / Linux**
 ```
 export DATABASE_URL=postgres://XXXXXXX:YYYYYYYYYYYYYYYYYYYYYYY@ec2-XXX-XXX-XXX-XXX.compute-X.amazonaws.com:XXXX/XXXXXXXXXXXXXXX <<< replace this with your string from above
-export GOOGLE_MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh  <<<<< replace this with your API key from Google Maps
+export MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh  <<<<< replace this with your API key
 ```
 
-**Windows / Option 1**
-```
+Windows / Option 1
+
 SET DATABASE_URL=postgres://XXXXXXX:YYYYYYYYYYYYYYYYYYYYYYY@ec2-XXX-XXX-XXX-XXX.compute-X.amazonaws.com:XXXX/XXXXXXXXXXXXXXX <<< replace this with your string from above
-SET GOOGLE_MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh  <<<<< replace this with your API key from Google Maps
-```
+SET MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh  <<<<< replace this with your API key
+Windows / Option 2 (In the PowerShell the above commands were not really working, echo %DATABASE_URL% returned just %DATABASE_URL% which is not OK, and the bellow commands worked )
 
-**Windows / Option 2**
-(In the PowerShell the above commands were not really working, `echo %DATABASE_URL%` returned just %DATABASE_URL% which is not OK, and the bellow commands worked )
-```
 $env:DATABASE_URL = "postgres://XXXXXXX:YYYYYYYYYYYYYYYYYYYYYYY@ec2-XXX-XXX-XXX-XXX.compute-X.amazonaws.com:XXXX/XXXXXXXXXXXXXXX" <<< replace this with your string from above
-$env:GOOGLE_MAPS_API_KEY = "ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh" <<<<< replace this with your API key from Google Maps
-```
+$env:MAPS_API_KEY = "ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh" <<<<< replace this with your API key
+✴️ The environment variables you are setting now only 'exist' for as long as you keep the terminal / Powershell session open. When you close it and start again, the variables are gone, and you have to set them again! So you will do this step every time you start working on your app.
 
-:eight_pointed_black_star: The environment variables you are setting now only 'exist' for as long as you keep the terminal / Powershell session open. When you close it and start again, the variables are gone, and you have to set them again! So you will do this step every time you start working on your app.
-
-The value for GOOGLE_MAPS_API_KEY in my sample is just a dummy value, you need to get the real api key value from your Google Apps console and use that value instead.
-Remember never to commit this API key to your repo because that is public and the key could get exploited / used by other people. Use of Google Maps API costs money after some limits, so be careful. If you publish your key by mistake you can invalidate it and create a new one.
+!!!!!! The value for MAPS_API_KEY in my sample is just a dummy value, you need to get the real api key value from your Esri developer console and use that value instead. Remember never to commit this API key to your repo because that is public and the key could get exploited / used by other people. --> DON'T ADD KEY TO README.md OR ANY OTHER FILE IN TEH REPO!!!!!!!
 
 If you want to verify the values of the env variables, use:
 
-**Mac / Linux**
-```
+Mac / Linux
+
 echo $DATABASE_URL
-echo $GOOGLE_MAPS_API_KEY
-```
+echo $MAPS_API_KEY
+Windows / Option 1
 
-**Windows / Option 1**
-```
 echo %DATABASE_URL%
-echo %GOOGLE_MAPS_API_KEY%
-```
+echo %MAPS_API_KEY%
+Windows / Option 2
 
-**Windows / Option 2**
-```
 $env:DATABASE_URL
-$env:GOOGLE_MAPS_API_KEY
-```
-
+$env:MAPS_API_KEY
 Finally, to run the app:
 
 **Mac / Linux / Windows **
-```
-flask run
-```
 
+flask run
 You should see something like this on the output of the console:
-```
+
  * Environment: production
    WARNING: This is a development server. Do not use it in a production deployment.
    Use a production WSGI server instead.
  * Debug mode: off
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-```
+If you access http://127.0.0.1:5000/ or http://localhost:5000/ you should see:
 
-If you access ```http://127.0.0.1:5000/``` or ```http://localhost:5000/``` you should see:
-
-![sample app](/_readme_assets/Sample-app.png)
+sample app
 
 Bonus: during development, you normally want to reload your application automatically whenever you make a change to it. You can do this by passing an environment variable, FLASK_ENV=development, to flask run:
 
-```
 FLASK_ENV=development flask run
-```
-
 You can also run your app locally from VSCode in debug mode, following the setup steps we did in https://github.com/FrauenLoop-Berlin/web201-summer2022-helloFlask
 
 Use Ctrl+C to quit / shut down the flask app.
 
-## Deploying the app to Heroku
-
+Deploying the app to Heroku
 Now that you verified the app runs locally, you can deploy it to Heroku!
 
 Make sure you do not have any local changes not commited to main branch at this point:
 
 **Mac / Linux / Windows **
-```
+
 git status
-```
+Should only show local files that are not meant to be commited like __pycache__/ (you do not need to commit this directory ever, you can add it to .gitignore later)
 
-Should only show local files that are not meant to be commited like `__pycache__/` (you do not need to commit this directory ever, you can add it to .gitignore later)
-
-```
 On branch main
 Your branch is ahead of 'origin/main' by 1 commit.
   (use "git push" to publish your local commits)
@@ -394,77 +390,62 @@ Untracked files:
         __pycache__/
 
 nothing added to commit but untracked files present (use "git add" to track)
-```
-
 If there are other things, add them and push them to main.
 
-```
 git add XXXXX
 git commit -m "Some more changes"
 git push
-```
-
-Now all your code is up-to-date with GitHub. This is important because you push to Heroku whatever is in the main branch of your repo. 
+Now all your code is up-to-date with GitHub. This is important because you push to Heroku whatever is in the main branch of your repo.
 
 Before deploy, a small extra step. Remember we need 2 environment variables for the sample code to work. DATABASE_URL is by default provided by Heroku because we have a DB attached to our app. The second env variable is something we define, so we need to set it manually as a Heroku config variable:
 
-**Mac / Linux / Windows **
-```
-heroku config:set GOOGLE_MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh <<<<< replace this with your API key from Google Maps
-```
+Mac / Linux / Windows
 
+heroku config:set MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh <<<<< replace this with your API key
 Now all is ready. To deploy that current state of your main branch into your Heroku app, run:
 
-**Mac / Linux / Windows **
-```
-git push heroku main
-```
+**Mac / Linux / Window **
 
+git push heroku main
 This will output a lot of things as heroku installs all components. By the end if all is OK you will see the URL of your launched app:
 
-```
 remote: -----> Launching...
 remote:        Released v5
 remote:        https://mduhagon-web-201-heroku-delete.herokuapp.com/ deployed to Heroku
 remote:
 remote: Verifying deploy... done.
-```
-
 If all went well, your sample app is now running in Heroku as well! Check the provided URL to verify.
 
-## What now?
+What now?
+The sample code has some useful functionality: it is taking the database connection string from the already set Heroku env variable, it is using another config variable for the Esri Maps key so that is not hardcoded in your source code (because the API key cannot be commited to GitHub!). It is also storing some sample data with lat / long and querying for it when you zoom / reposition the map. You can take a closer look at all this, so you then decide how to extend it.
 
-The sample code has some useful functionality: it is taking the database connection string from the already set Heroku env variable, it is using another config variable for the Google Maps key so that is not hardcoded in your source code (because the Google API key cannot be commited to GitHub!). It is also storing some sample data with lat / long and querying for it when you zoom / reposition the map. You can take a closer look at all this, so you then decide how to extend it.
-
-You will keep making changes to the app, adding the functionality of your project. Everything in the template is just a sample, you can change / remove things as you wish.
-Each time you have some new functionality working commit it to GitHub, and then to Heroku, so you make sure it works there as well.
+You will keep making changes to the app, adding the functionality of your project. Everything in the template is just a sample, you can change / remove things as you wish. Each time you have some new functionality working commit it to GitHub, and then to Heroku, so you make sure it works there as well.
 
 In a nutshell, this process will look like this:
 
-1. Use git status to see all the files you added or changed:
-
-```
+Use git status to see all the files you added or changed:
 git status
-```
-
-2. Use git add to stage all the above changes that should go to your repo (you may need to do this for multiple paths or you can also list many together)
-
-```
+Use git add to stage all the above changes that should go to your repo (you may need to do this for multiple paths or you can also list many together)
 git add xxxxx
-```
-
-3. Commit the changes and push to GitHub
-
-```
+Commit the changes and push to GitHub
 git commit -m "a short description of your changes so others know what you did / is also a future reference for yourself"
 git push
-```
-
-4. Deploy the changes to Heroku:
-
-```
+Deploy the changes to Heroku:
 heroku login
 git push heroku main
-```
-
 Happy coding!
+
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About

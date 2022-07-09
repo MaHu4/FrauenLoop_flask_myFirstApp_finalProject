@@ -15,8 +15,8 @@ def create_app(test_config=None):
     SECRET_KEY = os.urandom(32)
     app.config['SECRET_KEY'] = SECRET_KEY
 
-    """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
-    db_drop_and_create_all()
+    # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
+    # db_drop_and_create_all()
 
     @app.route('/', methods=['GET'])
     def home():
@@ -114,5 +114,5 @@ def create_app(test_config=None):
 
 app = create_app()
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT",5000))
+    port = int(os.environ.get("PORT",8000))
     app.run(host='127.0.0.1',port=port,debug=True)
