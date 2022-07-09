@@ -416,6 +416,9 @@ remote:
 remote: Verifying deploy... done.
 If all went well, your sample app is now running in Heroku as well! Check the provided URL to verify.
 
+
+Added note: installation worked until here. There is a notification to upgrade the stack from Heroku-18 to Heroku-20. The instructions to do that:  https://devcenter.heroku.com/articles/upgrading-to-the-latest-stack . Still not done. 
+
 What now?
 The sample code has some useful functionality: it is taking the database connection string from the already set Heroku env variable, it is using another config variable for the Esri Maps key so that is not hardcoded in your source code (because the API key cannot be commited to GitHub!). It is also storing some sample data with lat / long and querying for it when you zoom / reposition the map. You can take a closer look at all this, so you then decide how to extend it.
 
