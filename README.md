@@ -338,7 +338,7 @@ If you want to verify the values of the env variables, use:
 
 Mac / Linux
 
-echo $DATABASE_URL
+echo $DATABASE_URL / heroku config:get DATABASE_URL -a mahu4-myfirstapp-heroku-flask
 echo $MAPS_API_KEY
 Windows / Option 1
 
@@ -452,3 +452,16 @@ API
 Training
 Blog
 About
+
+### END OF MENTOR'S INSTRUCTION ###
+
+Changed port to 8000:
+   - in app.py line 117
+   - in terminal :  export FLASK_RUN_PORT=8000
+   - in terminal : flask run
+
+
+Trying tio run debug mode:
+- installed extension  Deno v3.13.0 to run debug mode --> didn't work
+- created a launch.json file  in .vscode
+   
