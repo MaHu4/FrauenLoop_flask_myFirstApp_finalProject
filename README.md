@@ -321,6 +321,7 @@ To set the environment variables run:
 export DATABASE_URL=postgres://XXXXXXX:YYYYYYYYYYYYYYYYYYYYYYY@ec2-XXX-XXX-XXX-XXX.compute-X.amazonaws.com:XXXX/XXXXXXXXXXXXXXX <<< replace this with your string from above
 export MAPS_API_KEY=ssdfsdfsAAqfdfsuincswdfgcxhmmjzdfgsevfh  <<<<< replace this with your API key
 ```
+Added note: I don't need to do these 2 steps anymore, because I added the DATABASE_URL and MAPS_API_KEY in the luanch.json file 
 
 Windows / Option 1
 
@@ -455,13 +456,27 @@ About
 
 ### END OF MENTOR'S INSTRUCTION ###
 
+## NEW STEPS/ CHANGES ##
+
 Changed port to 8000:
    - in app.py line 117
    - in terminal :  export FLASK_RUN_PORT=8000
-   - in terminal : flask run
+   - The venv was always running on 5000 instead of 8000. I tried out many things with the help of Maria. It worked in the end when we created a new launch.json file and added the DATABASE_URL and MAPS_API_KEY (see below) 
 
 
-Trying tio run debug mode:
-- installed extension  Deno v3.13.0 to run debug mode --> didn't work
 - created a launch.json file  in .vscode
-   
+   - added lines 15-20:  "env": {
+                "FLASK_APP": "app.py",
+                "FLASK_ENV": "development",
+                "DATABASE_URL": "postgres://xxx",
+                "MAPS_API_KEY": "xxx"
+            }
+- instead of using "flask run" in terminal, run the debug mode to get right port. Make sure that port is exited with ctrl+c in "main" console (i.e. not the debug console) if you have used "flask run" beforehand 
+
+- changed center of map that is seen when calling the "/-route" in the map.js-file (line 39) from Berlin to Leizig :
+ view = new MapView({
+    map: map,
+    center: [12.3731, 51.3397], // Longitude, latitude. We start at the center of Leipzig
+    zoom: 13, // Zoom level
+
+## EXISTING ROUTES in app.py
