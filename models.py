@@ -31,15 +31,11 @@ def setup_db(app):
     drops the database tables and starts fresh
     can be used to initialize a clean database
 '''
-def db_drop_and_create_all():  
-    #function to drop and create all tables that exist. Changes in model-class dont take effect immediately, but will only be created by SQelAlcheamny when creating the tables. WHen we drop all tables we loose all data of the table --> if we don't want to loose data anymore, this needs to be changes
+def db_drop_and_create_all():
     db.drop_all()
     db.create_all()
 
-
-## MAP FUNCTIONS ##
     # Initial sample data:
-
     insert_sample_locations()
 
 def insert_sample_locations():
@@ -70,22 +66,14 @@ def insert_sample_locations():
     )
     loc3.insert()
 
+class SpatialConstants:
+    SRID = 4326
+class SampleLocation(db.Model):
+    __tablename__ = 'sample_locations'
 
-class SpatialConstants: 
-    #small class to hold some constant
-    SRID = 4326 
-    #SRID is a value for points; works well for places that are not close to the pole; coordinate system for latitude and longitude; it's  math calculation to make coordinates fit on the map of a globus
-class SampleLocation(db.Model): 
-    #first defined model class to store sample locations in the DB
-    __tablename__ = 'sample_locations' 
-    #table is created and data is stored in it
-
-    id = Column(Integer, primary_key=True) 
-    #first column in the table, primary key is an attribute that identifies uniquly the row of the respective table ; not repeated anywhere; every location get's new id
-    description = Column(String(80)) 
-    #second column: max length of characters  for desciption field.
-    geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID)) 
-     #geom is a point/ coordinates
+    id = Column(Integer, primary_key=True)
+    description = Column(String(80))
+    geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))  
 
     @staticmethod
     def point_representation(latitude, longitude):
