@@ -28,6 +28,7 @@ Prerequisites
 A GitHub account and a personal access token so you can commit stuff from the command line
 Git installed in your machine so you can execute git commands
 Python installed in your machine so you can execute Python commands and run Pyton scripts. Make sure you have version 3.6 or superior. You also need to use pip, can't remember if that needed to be installed separately.
+
 An Esri Maps API Key (You can get one here: https://developers.arcgis.com/javascript/latest/get-started/#2-get-an-api-key)
 Might be needed: A local installation of Postgres: The instructions given here will allow you to connect to the DB hosted in Heroku, even when you are running locally. Regardless, there are a few steps that may not work if you have no local Postgres installed. These are:
 the install of dependency psycopg2 (you can workaround this one by installing psycopg2-binary instead)
@@ -456,6 +457,34 @@ About
 
 ### END OF MENTOR'S INSTRUCTION ###
 
+## ADDITIONAL INSTRUCTIONS:
+# How to run your app using a VSCode launch configuration 
+# Adding API key to launch.json file
+
+You probably started creating your project and executing the commands in the tutorial / template readme in a command line window. At some point, it is very useful to open the project folder you created in VSCode, so you can start editing all files from there.
+In VSCode you have a terminal, so you can still execute commands from there as you were doing before. For example flask run  to start the app.
+There might be some issues with this method:
+- You want to start the app in debug / developer mode so the changes you make to code are picked up while the app is running
+- You want to quickly / more easily set up your environment variables and activate your virtual environment
+- You want to be able to put breakpoints on the python code of your app to do debugging
+
+For all these things, setting up a launch configuration helps:
+Open your project folder in VSCode (File > Open Folder...) I chose C:\Users\mduha\esri-project-windows because that is the folder I created for my latest app.
+
+The project already contains a venv folder (I created it via the commands in the readme) If you do not have one yet go check those commands in the readme and execute them inside your folder (you can use the terminal in VSCode if you like)
+
+On the File explorer column on the left, select / click the app.py file. This is the 'entry point' to our app so when we select it VSCode will pick up that on launch, this is the file that should be used (Image 1 for ref)
+Then on the left sidebar you click on the Button for 'Run & Debug' (it has a play symbol and a bug on top). This will change what you see on the left nav bar, and there you get a link to 'create a launch.json file'. Click on that. A dropdown with app types appears in the center, choose Flask there.
+The file will be created inside a folder called .vscode, search for that using the file explorer in VSCode
+
+The content of the json might be different depending on your OS. What we want to do there is to add our environment variables to a 'section' called 'env' (if you do not have it you can add env to the json). These are the vars I added (you need to set your own database url and api keys and if you use Google maps the 2nd variable is called GOOGLE_MAPS_API_KEY):
+
+"DATABASE_URL": "postgres://gvxxvvxcjouzqd:ac317aff5d58a9c1b3878ef2cc78878a3ff464e954b629026d4e4191a5ed9636@ec2-23-23-151-191.compute-1.amazonaws.com:5432/du55etnidh3mg", 
+
+"MAPS_API_KEY": "AAPK0825debdbc3346ea9e40eda283343c6dX8eO4LmGV3COs9-HVKnd7srzQqXIETVun2s1eIRqBMfWdILRx9TieRgHk6O81a7R"
+
+Once you added these lines to launch.json and saved the file you can run / start your app using the green run/play button on VSCode 'Run & Debug' panel.
+
 ## NEW STEPS/ CHANGES ##
 
 Changed port to 8000:
@@ -471,12 +500,14 @@ Changed port to 8000:
                 "DATABASE_URL": "postgres://xxx",
                 "MAPS_API_KEY": "xxx"
             }
-- instead of using "flask run" in terminal, run the debug mode to get right port. Make sure that port is exited with ctrl+c in "main" console (i.e. not the debug console) if you have used "flask run" beforehand 
+- MAKING APP RUN: instead of using "flask run" in terminal, run the debug mode to get right port. Make sure that port is exited with ctrl+c in "main" console (i.e. not the debug console) if you have used "flask run" beforehand. IMPORTANT: click on app.py and then on debug mode on the left. Otherwise, the app will not work properly. 
 
-- changed center of map that is seen when calling the "/-route" in the map.js-file (line 39) from Berlin to Leizig :
+- Changed center of map that is seen when calling the "/-route" in the map.js-file (line 39) from Berlin to Leizig :
  view = new MapView({
     map: map,
     center: [12.3731, 51.3397], // Longitude, latitude. We start at the center of Leipzig
     zoom: 13, // Zoom level
+
+    
 
 ## EXISTING ROUTES in app.py
