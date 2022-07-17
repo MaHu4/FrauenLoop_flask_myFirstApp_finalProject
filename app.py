@@ -96,7 +96,9 @@ def create_app(test_config=None):
         flash(f'You have logged out!', 'success')
         return redirect(url_for('home'))   
 
+
     ## INTERACTIVE MAP 
+
     @app.route('/', methods=['GET'])
     def home():
         return render_template(
@@ -115,7 +117,7 @@ def create_app(test_config=None):
         )            
 
     @app.route("/new-location", methods=['GET', 'POST'])
-    @login_required
+    # @login_required
     def new_location():
         form = NewLocationForm()
 
