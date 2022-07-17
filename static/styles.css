@@ -10,3 +10,7 @@ body,
 #container {
   padding: 20pt;
 }
+
+.navbar li.nav-item {
+  color: #fff;    
+}

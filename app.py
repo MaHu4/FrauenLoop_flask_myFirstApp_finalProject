@@ -6,6 +6,17 @@ import traceback
 from forms import NewLocationForm
 from models import setup_db, SampleLocation, db_drop_and_create_all
 
+from forms import RegistrationForm
+from models import User
+from sqlalchemy.exc import IntegrityError
+import hashlib
+
+from forms import LoginForm
+from flask_login import login_user, logout_user, login_required, current_user, login_manager, LoginManager
+
+
+
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -15,9 +26,77 @@ def create_app(test_config=None):
     SECRET_KEY = os.urandom(32)
     app.config['SECRET_KEY'] = SECRET_KEY
 
-    """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
-    db_drop_and_create_all()
+    # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
+    # db_drop_and_create_all()
 
+    # initialize a LoginManager at the app level
+
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'login'
+    login_manager.login_message_category = 'info'
+
+    ## REGISTRATION FORM
+
+    @app.route("/register", methods=['GET', 'POST'])
+    def register():
+        # Sanity check: if the user is already authenticated then go back to home page
+        # if current_user.is_authenticated:
+        #     return redirect(url_for('home'))
+
+        # Otherwise process the RegistrationForm from request (if it came)
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            # hash user password, create user and store it in database
+            hashed_password = hashlib.md5(form.password.data.encode()).hexdigest()
+            user = User(
+                full_name=form.fullname.data,
+                display_name=form.username.data, 
+                email=form.email.data, 
+                password=hashed_password)
+
+            try:
+                user.insert()
+                flash(f'Account created for: {form.username.data}!', 'success')
+                return redirect(url_for('home'))
+            except IntegrityError as e:
+                flash(f'Could not register! The entered username or email might be already taken', 'danger')
+                print('IntegrityError when trying to store new user')
+                # db.session.rollback()
+            
+        return render_template('registration.html', form=form)   
+
+    ## LOGIN
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.get_by_id(user_id)           
+
+    @app.route("/login", methods=['GET', 'POST'])
+    def login():
+        # Sanity check: if the user is already authenticated then go back to home page
+        # if current_user.is_authenticated:
+        #    return redirect(url_for('home'))
+
+        form = LoginForm()
+        if form.validate_on_submit():
+            user = User.query.filter_by(display_name=form.username.data).first()
+            hashed_input_password = hashlib.md5(form.password.data.encode()).hexdigest()
+            if user and user.password == hashed_input_password:
+                login_user(user, remember=form.remember.data)
+                next_page = request.args.get('next')
+                return redirect(next_page) if next_page else redirect(url_for('home'))
+            else:
+                flash('Login Unsuccessful. Please check user name and password', 'danger')
+        return render_template('login.html', title='Login', form=form) 
+
+    @app.route("/logout")
+    @login_required
+    def logout():
+        logout_user()
+        flash(f'You have logged out!', 'success')
+        return redirect(url_for('home'))   
+
+    ## INTERACTIVE MAP 
     @app.route('/', methods=['GET'])
     def home():
         return render_template(
@@ -36,6 +115,7 @@ def create_app(test_config=None):
         )            
 
     @app.route("/new-location", methods=['GET', 'POST'])
+    @login_required
     def new_location():
         form = NewLocationForm()
 
@@ -112,7 +192,10 @@ def create_app(test_config=None):
 
     return app
 
+
 app = create_app()
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",5000))
     app.run(host='127.0.0.1',port=port,debug=True)
+
+

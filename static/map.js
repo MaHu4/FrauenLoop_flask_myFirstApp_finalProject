@@ -36,7 +36,7 @@ function initMap(esriConfig, Map, MapView, Graphic, GraphicsLayer, reactiveUtils
 
   view = new MapView({
     map: map,
-    center: [13.4050, 52.5200], // Longitude, latitude. We start at the center of Berlin
+    center: [12.3731, 51.3397], // Longitude, latitude. We start at the center of Leipzig
     zoom: 13, // Zoom level
     maxZoom: 18,
     minZoom: 5,

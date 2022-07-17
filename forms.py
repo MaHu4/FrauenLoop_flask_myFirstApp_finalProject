@@ -1,7 +1,74 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField
-from wtforms.validators import DataRequired, Length
+from wtforms import StringField, SubmitField, HiddenField, PasswordField
+from wtforms.validators import DataRequired, Length, Email, EqualTo
+from wtforms import StringField, SubmitField, HiddenField, PasswordField, BooleanField
 
+## REGISTRATION FORM
+
+class RegistrationForm(FlaskForm):
+    fullname = StringField(
+        'Full Name', 
+        validators=
+            [DataRequired(), 
+            Length(min=2, max=200)
+        ]
+    )
+
+    username = StringField(
+        'Username / Display Name', 
+        validators=
+            [DataRequired(), 
+            Length(min=2, max=20)
+        ]
+    )
+
+    email = StringField(
+        'Email',
+        validators=[
+            DataRequired(), 
+            Email()
+        ]
+    )
+
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    confirm_password = PasswordField(
+        'Confirm Password',
+        validators=[
+            DataRequired(),
+            EqualTo('password')
+        ]
+    )
+
+    submit = SubmitField('Sign up')  
+
+## LOGIN FORM
+
+class LoginForm(FlaskForm):
+    username = StringField(
+        'Username / Display Name',
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    remember = BooleanField('Remember me')
+
+    submit = SubmitField('Login')    
+
+## NEW LOCATIION IN MAP
 
 class NewLocationForm(FlaskForm):
     description = StringField('Location description',
@@ -13,3 +80,4 @@ class NewLocationForm(FlaskForm):
     coord_longitude = HiddenField('Longitude', validators=[DataRequired()])                    
 
     submit = SubmitField('Create Location')
+
