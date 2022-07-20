@@ -39,7 +39,7 @@ def create_app(test_config=None):
     #     return render_template('landing.html') 
 
 
-        ## LOGIN
+    ## LOGIN
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -60,15 +60,17 @@ def create_app(test_config=None):
                 next_page = request.args.get('next')
                 return redirect(next_page) if next_page else redirect(url_for('home'))
             else:
-                flash('Login Unsuccessful. Please check user name and password', 'danger')
+                flash('Oups! Something went wrong. Please check user name and password', 'danger')
         return render_template('login.html', title='Login', form=form) 
+
+    ## LOGOUT
 
     @app.route("/logout")
     @login_required
     def logout():
         logout_user()
         flash(f'You have logged out!', 'success')
-        return redirect(url_for('home'))   
+        return redirect(url_for('login'))   
 
     ## REGISTRATION FORM
 
