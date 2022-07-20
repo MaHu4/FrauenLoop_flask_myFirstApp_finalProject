@@ -77,7 +77,8 @@ class NewLocationForm(FlaskForm):
 
     coord_latitude = HiddenField('Latitude',validators=[DataRequired()])
 
-    coord_longitude = HiddenField('Longitude', validators=[DataRequired()])                    
+    coord_longitude = HiddenField('Longitude', validators=[DataRequired()])  
+    ## add drop-down option with wtforms to and categories                   
 
     submit = SubmitField('Create Location')
 

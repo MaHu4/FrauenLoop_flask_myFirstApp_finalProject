@@ -1,22 +1,32 @@
-html,
+/* html,
+body, */
+
 body {
   background-color: #92d36e;
+  /* background: url('Logo.jpeg'); */
+  /* min-height:100vh;
+  opacity:0.1;
+  background-size:cover;
+  background-position:center center;
+  background-repeat: no-repeat;
+  -webkit-mask-image: linear-gradient(#92d36e, transparent);
+  mask-image: linear-gradient(#92d36e, transparent);
+  border-radius: 15px 50px; */
 }
 
 #viewDiv {
   padding: 0;
-  margin: 50px;
-  border-width: 0px;
-  height: 100%;
+  margin: 0;
+  height: 500px;
   width: 100%;
-  position: absolute;
-  touch-action: pan-x pan-y;
 }
 
 #container {
   padding: 20pt;
 }
 
-.navbar li.nav-item {
-  color: #fff;    
-}
+.navbar {
+  color:whitesmoke;
+  text-decoration: none !important;
+  background-color: #4c82d6;
+  }

@@ -41,41 +41,44 @@ def db_drop_and_create_all():
     insert_sample_locations()
 
 def insert_sample_locations():
-    loc1 = SampleLocation(
-        description='Brandenburger Tor',
-        geom=SampleLocation.point_representation(
-            latitude=52.516247, 
-            longitude=13.377711
-        )
-    )
-    loc1.insert()
+    pass
+    # loc1 = SampleLocation(
+    #     description='Brandenburger Tor',
+    #     geom=SampleLocation.point_representation(
+    #         latitude=52.516247, 
+    #         longitude=13.377711
+    #     )
+    # )
+    # loc1.insert()
 
-    loc2 = SampleLocation(
-        description='Schloss Charlottenburg',
-        geom=SampleLocation.point_representation(
-            latitude=52.520608, 
-            longitude=13.295581
-        )
-    )
-    loc2.insert()
+    # loc2 = SampleLocation(
+    #     description='Schloss Charlottenburg',
+    #     geom=SampleLocation.point_representation(
+    #         latitude=52.520608, 
+    #         longitude=13.295581
+    #     )
+    # )
+    # loc2.insert()
 
-    loc3 = SampleLocation(
-        description='Tempelhofer Feld',
-        geom=SampleLocation.point_representation(
-            latitude=52.473580, 
-            longitude=13.405252
-        )
-    )
-    loc3.insert()
+    # loc3 = SampleLocation(
+    #     description='Tempelhofer Feld',
+    #     geom=SampleLocation.point_representation(
+    #         latitude=52.473580, 
+    #         longitude=13.405252
+    #     )
+    # )
+    # loc3.insert()
 
 class SpatialConstants:
     SRID = 4326
+
 class SampleLocation(db.Model):
     __tablename__ = 'sample_locations'
 
     id = Column(Integer, primary_key=True)
     description = Column(String(80))
-    geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))  
+    geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))
+    categorie = Column(String(50))  #added
 
     @staticmethod
     def point_representation(latitude, longitude):

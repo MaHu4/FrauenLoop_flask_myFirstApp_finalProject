@@ -15,8 +15,6 @@ from forms import LoginForm
 from flask_login import login_user, logout_user, login_required, current_user, login_manager, LoginManager
 
 
-
-
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
@@ -26,7 +24,7 @@ def create_app(test_config=None):
     SECRET_KEY = os.urandom(32)
     app.config['SECRET_KEY'] = SECRET_KEY
 
-    # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
+    # # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
     # db_drop_and_create_all()
 
     # initialize a LoginManager at the app level
@@ -34,6 +32,11 @@ def create_app(test_config=None):
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
     login_manager.login_message_category = 'info'
+
+    ## Landing Page
+    @app.route("/")
+    def landingpage():
+        return render_template('landing.html') 
 
     ## REGISTRATION FORM
 
@@ -99,7 +102,7 @@ def create_app(test_config=None):
 
     ## INTERACTIVE MAP 
 
-    @app.route('/', methods=['GET'])
+    @app.route('/map', methods=['GET'])
     def home():
         return render_template(
             'map.html', 
@@ -117,7 +120,7 @@ def create_app(test_config=None):
         )            
 
     @app.route("/new-location", methods=['GET', 'POST'])
-    # @login_required
+    @login_required #one needs to be logged in to access feature
     def new_location():
         form = NewLocationForm()
 
@@ -171,6 +174,8 @@ def create_app(test_config=None):
             latitude = float(request.args.get('lat'))
             longitude = float(request.args.get('lng'))
             radius = int(request.args.get('radius'))
+
+            # cat1 = string()
             
             locations = SampleLocation.get_items_within_radius(latitude, longitude, radius)
             return jsonify(
@@ -193,7 +198,6 @@ def create_app(test_config=None):
         }), 500
 
     return app
-
 
 app = create_app()
 if __name__ == '__main__':
