@@ -3,6 +3,8 @@ body, */
 
 body {
   background-color: #92d36e;
+  color: #4c82d6;
+  align-items: center;
   /* background: url('Logo.jpeg'); */
   /* min-height:100vh;
   opacity:0.1;
@@ -13,6 +15,18 @@ body {
   mask-image: linear-gradient(#92d36e, transparent);
   border-radius: 15px 50px; */
 }
+h1, h3 {
+  text-align: center;
+}
+
+/* LOGIN */
+
+#logo-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 #viewDiv {
   padding: 0;
@@ -23,6 +37,13 @@ body {
 
 #container {
   padding: 20pt;
+  margin: 0pt 250pt;
+  align-items: center;
+}
+
+.btn {
+  color: #4c82d6;
+
 }
 
 .navbar {

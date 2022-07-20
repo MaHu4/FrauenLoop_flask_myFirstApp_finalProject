@@ -3,6 +3,28 @@ from wtforms import StringField, SubmitField, HiddenField, PasswordField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, BooleanField
 
+
+
+## LOGIN FORM
+
+class LoginForm(FlaskForm):
+    username = StringField(
+        'Username',
+        validators=[
+            DataRequired()
+        ]
+    )
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired()
+        ]
+    )
+
+    remember = BooleanField('Remember me')
+
+    submit = SubmitField('Login')    
+
 ## REGISTRATION FORM
 
 class RegistrationForm(FlaskForm):
@@ -15,7 +37,7 @@ class RegistrationForm(FlaskForm):
     )
 
     username = StringField(
-        'Username / Display Name', 
+        'Username', 
         validators=
             [DataRequired(), 
             Length(min=2, max=20)
@@ -47,26 +69,6 @@ class RegistrationForm(FlaskForm):
 
     submit = SubmitField('Sign up')  
 
-## LOGIN FORM
-
-class LoginForm(FlaskForm):
-    username = StringField(
-        'Username / Display Name',
-        validators=[
-            DataRequired()
-        ]
-    )
-
-    password = PasswordField(
-        'Password',
-        validators=[
-            DataRequired()
-        ]
-    )
-
-    remember = BooleanField('Remember me')
-
-    submit = SubmitField('Login')    
 
 ## NEW LOCATIION IN MAP
 
