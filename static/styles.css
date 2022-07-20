@@ -15,9 +15,29 @@ body {
   mask-image: linear-gradient(#92d36e, transparent);
   border-radius: 15px 50px; */
 }
-h1, h3 {
+h1 {
   text-align: center;
 }
+
+/* NAVBAR */
+
+.navbar-expand-lg .navbar-nav .nav-link {
+  text-decoration: none;
+  color: whitesmoke;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+a:hover {
+  color: white;
+  text-decoration: underline;
+}
+
+.btn {
+  color: whitesmoke;
+  background-color: #92d36e;
+}
+
 
 /* LOGIN */
 

@@ -4,12 +4,14 @@
     <div class="content-section">
         <img id="logo-center" src="https://res.cloudinary.com/mahu/image/upload/ar_1:1,b_rgb:92d36e,bo_5px_solid_rgb:4c82d6,c_fill,g_auto,h_200,r_max,w_200/v1658298591/First%20Flask%20App/Logo_gpjfzv.jpg" alt="Cinque Terre">
         <h1>You have a nice shirt!</h1>
-        <h3>Hi there! Happy to see you again.</h3>
+        
        
         <form method="POST" action="">
+            
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4"></legend>
+                <p>Hi there! Happy to see you again.</p>
                 <div class="form-group">
                     {{ form.username.label(class="form-control-label") }}    
                     {% if form.username.errors %}
