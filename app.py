@@ -49,7 +49,7 @@ def create_app(test_config=None):
     def login():
         # Sanity check: if the user is already authenticated then go back to home page
         # if current_user.is_authenticated:
-        #    return redirect(url_for('home'))
+        #    return redirect(url_for('map'))
 
         form = LoginForm()
         if form.validate_on_submit():
@@ -58,7 +58,7 @@ def create_app(test_config=None):
             if user and user.password == hashed_input_password:
                 login_user(user, remember=form.remember.data)
                 next_page = request.args.get('next')
-                return redirect(next_page) if next_page else redirect(url_for('home'))
+                return redirect(next_page) if next_page else redirect(url_for('map'))
             else:
                 flash('Oups! Something went wrong. Please check user name and password', 'danger')
         return render_template('login.html', title='Login', form=form) 
@@ -78,7 +78,7 @@ def create_app(test_config=None):
     def register():
         # Sanity check: if the user is already authenticated then go back to home page
         # if current_user.is_authenticated:
-        #     return redirect(url_for('home'))
+        #     return redirect(url_for('map'))
 
         # Otherwise process the RegistrationForm from request (if it came)
         form = RegistrationForm()
@@ -94,7 +94,7 @@ def create_app(test_config=None):
             try:
                 user.insert()
                 flash(f'Account created for: {form.username.data}!', 'success')
-                return redirect(url_for('home'))
+                return redirect(url_for('map'))
             except IntegrityError as e:
                 flash(f'Could not register! The entered username or email might be already taken', 'danger')
                 print('IntegrityError when trying to store new user')
@@ -108,7 +108,7 @@ def create_app(test_config=None):
     ## INTERACTIVE MAP 
 
     @app.route('/map', methods=['GET'])
-    def home():
+    def map():
         return render_template(
             'map.html', 
             map_key=os.getenv('MAPS_API_KEY', 'MAPS_API_KEY_WAS_NOT_SET?!')
@@ -141,7 +141,7 @@ def create_app(test_config=None):
             location.insert()
 
             flash(f'New location created!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('map'))
 
         return render_template(
             'new-location.html',
