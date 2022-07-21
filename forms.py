@@ -35,7 +35,6 @@ class RegistrationForm(FlaskForm):
             Length(min=2, max=200)
         ]
     )
-
     username = StringField(
         'Username', 
         validators=
@@ -51,14 +50,12 @@ class RegistrationForm(FlaskForm):
             Email()
         ]
     )
-
     password = PasswordField(
         'Password',
         validators=[
             DataRequired()
         ]
     )
-
     confirm_password = PasswordField(
         'Confirm Password',
         validators=[
@@ -66,7 +63,6 @@ class RegistrationForm(FlaskForm):
             EqualTo('password')
         ]
     )
-
     submit = SubmitField('Sign up')  
 
 

@@ -24,8 +24,8 @@ def create_app(test_config=None):
     SECRET_KEY = os.urandom(32)
     app.config['SECRET_KEY'] = SECRET_KEY
 
-    # # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
-    # db_drop_and_create_all()
+    # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
+    db_drop_and_create_all()
 
     # initialize a LoginManager at the app level
 

@@ -8,8 +8,8 @@ function initAutocomplete(esriConfig,Map, MapView, Search) {
 
   view = new MapView({
       map: map,
-      center: [13.4050, 52.5200], // Longitude, latitude. We start at the center of Berlin
-      zoom: 13, // Zoom level
+      center: [12.3731, 51.3397], // Longitude, latitude. We start at the center of Leipzig
+      zoom: 12, // Zoom level
       maxZoom: 18,
       minZoom: 5,
       container: "viewDiv" // Div element

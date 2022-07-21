@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+
 {% block head %}
     <!-- This was the base tutorial to implement this: https://developers.arcgis.com/esri-leaflet/geocode-and-search/search-for-an-address/-->
     <link rel="stylesheet" href="https://js.arcgis.com/4.24/esri/themes/light/main.css"> 
@@ -14,78 +15,85 @@
 
 {% block body %}
 <div id="container">
+    
     <form method="POST" action="">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Add new location</legend>
-            {% if form.coord_latitude.errors or  form.coord_longitude.errors %}
-            <div class="alert alert-danger" role="alert">
-                Make sure to select a valid point in the map!
-            </div>
-            {% endif %}
 
-            <!-- Search address -->
-            <div class="form-group">
-                {{ form.lookup_address.label(class="form-control-label") }}
-                {% if form.lookup_address.errors %}
-                    <small id="emailHelp" class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want:</small>
-                    <div class="invalid-feedback">
-                        {% for error in form.lookup_address.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
+        <div class="row">
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                <div id="viewDiv"></div>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 col-xxl-6">
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Add new location</legend>
+                    {% if form.coord_latitude.errors or  form.coord_longitude.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        Make sure to select a valid point in the map!
                     </div>
-                {% else %}
-                <small id="emailHelp" class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want:</small>
-                {% endif %}      
-            </div>
+                    {% endif %}
 
-             <!-- Name of Location -->
-             <div class="form-group">
-                {{ form.location_name.label(class="form-control-label")}}
-
-                
-                {% if form.location_name.errors %}
-                    {{ form.location_name(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.location_name.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
+                    <!-- Search address -->
+                    <div class="form-group">
+                        {{ form.lookup_address.label(class="form-control-label") }}
+                        {% if form.lookup_address.errors %}
+                            <small id="emailHelp" class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want</small>
+                            <div class="invalid-feedback">
+                                {% for error in form.lookup_address.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        <small  class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want</small>
+                        {% endif %}      
                     </div>
-                {% else %}
-                    {{ form.location_name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
 
-             <!-- Drop Down Category-->  
-            <div class="form-group">  
-             {{ form.shop_category.label(class="form-control-label")}}
-
-                {{form.shop_category }}
-            </div>
-
-            <!-- Description field-->
-            <div class="form-group">
-                {{ form.description.label(class="form-control-label")}}
-                <!-- {{ form.description.label(rows='50',cols='100')}} -->
-                
-                {% if form.description.errors %}
-                    {{ form.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.description.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
+                    <!-- Name of Location -->
+                    <div class="form-group">
+                        {{ form.location_name.label(class="form-control-label")}}
+                        
+                        {% if form.location_name.errors %}
+                            {{ form.location_name(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.location_name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.location_name(class="form-control form-control-lg") }}
+                        {% endif %}
                     </div>
-                {% else %}
-                    {{ form.description(class="form-control form-control-lg") }}
-                {% endif %}
+
+                    <!-- Drop Down Category-->  
+                    <div class="form-group">  
+                    {{ form.shop_category.label(class="form-control-label")}}
+
+                        {{form.shop_category }}
+                    </div>
+
+                    <!-- Description field-->
+                    <div class="form-group">
+                        {{ form.description.label(class="form-control-label")}}
+                        {% if form.description.errors %}
+                            <!-- <small class="form-text text-muted">"Add opening hours, what type of clothes or service one can get there, links to the location's website and/or social media sides etc."</small> -->
+                            {{ form.description(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.description.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                        <small class="form-text text-muted">Add useful information about the location such as opening hours, type of clothes or service, links to its website and/or social media sides etc. (length up to 500 characters)</small>
+                            {{ form.description(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <!-- Submit button -->
+                    <div class="form-group">
+                        {{ form.submit(class="btn btn-outline-info") }}
+                    </div>
+                </fieldset>
             </div>
-            
-        </fieldset>
-        <div id="preview" style="width: 100%; height: 400px">
-            <div id="viewDiv"></div>
-        </div>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
         </div>
     </form>
 </div>    
