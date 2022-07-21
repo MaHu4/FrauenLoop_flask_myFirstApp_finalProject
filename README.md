@@ -966,6 +966,15 @@ Add the @login_required annotation to the new_location route (the line in the mi
     
 
 - New Locations:
+    Description of location:
+    - changed StringField to TextAreaField
+
+    Added shop_category:
     - added "category = form.category.data" to  @app.route("/new-location" in app.py
     - added "SelectField" to "class NewLocationForm(FlaskForm)" in forms.py
-    - added "<div class="form-group">" "with {{form.category }}" in new-location.html
+    - added "<div class="form-group">" "with {{form.shopCategory }}" in new-location.html
+
+    Added location_name:
+    - added "shop_category = form.shop_category.data" to  @app.route("/new-location" in app.py
+    - added "StringField" to "class NewLocationForm(FlaskForm)" in forms.py
+    - added "<div class="form-group">" "with form.location_name...." (copy-paste from description field) in new-location.html

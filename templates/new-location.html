@@ -36,15 +36,31 @@
                     </div>
                 {% else %}
                 <small id="emailHelp" class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want:</small>
-                {% endif %}
-
-            <!-- Drop Down Category-->        
+                {% endif %}      
             </div>
-            <!-- <legend class="border-bottom mb-4">Choose category for new location</legend> -->
-            <div class="form-group">  
-                {{ form.category.label(class="form-control-label")}}
 
-                {{form.category }}
+             <!-- Name of Location -->
+             <div class="form-group">
+                {{ form.location_name.label(class="form-control-label")}}
+
+                
+                {% if form.location_name.errors %}
+                    {{ form.location_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.location_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.location_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+
+             <!-- Drop Down Category-->  
+            <div class="form-group">  
+             {{ form.shop_category.label(class="form-control-label")}}
+
+                {{form.shop_category }}
             </div>
 
             <!-- Description field-->

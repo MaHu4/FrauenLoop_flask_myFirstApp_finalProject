@@ -133,9 +133,12 @@ def create_app(test_config=None):
             latitude = float(form.coord_latitude.data)
             longitude = float(form.coord_longitude.data)
             description = form.description.data
-            category = form.category.data
+            location_name = form.location_name.data
+            shop_category = form.shop_category.data
             location = SampleLocation(
                 description=description,
+                location_name=location_name,
+                shop_category=shop_category,
                 geom=SampleLocation.point_representation(latitude=latitude, longitude=longitude)
             )   
             location.insert()

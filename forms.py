@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, PasswordField, SelectField
+from wtforms import StringField, SubmitField, HiddenField, PasswordField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, BooleanField
 
@@ -73,12 +73,12 @@ class RegistrationForm(FlaskForm):
 ## NEW LOCATIION IN MAP
 
 class NewLocationForm(FlaskForm):
-    description = StringField('Location description', validators=[DataRequired(), Length(min=1, max=500)])
     lookup_address = StringField('Search address')
-
     coord_latitude = HiddenField('Latitude',validators=[DataRequired()])
-
     coord_longitude = HiddenField('Longitude', validators=[DataRequired()]) 
-    category = SelectField(u'Category', choices=[('1', 'Secondhand Shop'),('2', 'Fairfashion Shop'),('3','Swap box/cupboard'),('4','Flea market')])                   
+
+    location_name = StringField('Name of the location', validators=[DataRequired(), Length(min=1, max=50)])
+    shop_category = SelectField(u'Select shop category', choices=[('1', 'Secondhand store / boutique'),('2', 'Fairfashion store'),('3','Rental store for clothes'), ('4','Designer fashion store'),('5','Swap box / cupboard'),('6','Flea market for clothes'),('7','Tailor or shoe maker / repairer'),('8', 'Upcycling'),('9','Clothes donations'),('10','Eco laundry')])   
+    description = TextAreaField('Location description', validators=[DataRequired(), Length(min=1, max=500)])                
 
     submit = SubmitField('Create Location')
