@@ -76,9 +76,8 @@ class SampleLocation(db.Model):
     __tablename__ = 'sample_locations'
 
     id = Column(Integer, primary_key=True)
-    description = Column(String(80))
+    description = Column(String(500))
     geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))
-    categorie = Column(String(50))  #added
 
     @staticmethod
     def point_representation(latitude, longitude):
@@ -116,8 +115,9 @@ class SampleLocation(db.Model):
             'description': self.description,
             'location': {
                 'lng': self.get_location_longitude(),
-                'lat': self.get_location_latitude()
-            }
+                'lat': self.get_location_latitude(), 
+            },
+            'category': self.category
         }    
 
     def insert(self):

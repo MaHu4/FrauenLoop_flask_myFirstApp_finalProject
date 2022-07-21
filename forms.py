@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, HiddenField, PasswordField
+from wtforms import StringField, SubmitField, HiddenField, PasswordField, SelectField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, BooleanField
 
@@ -73,14 +73,12 @@ class RegistrationForm(FlaskForm):
 ## NEW LOCATIION IN MAP
 
 class NewLocationForm(FlaskForm):
-    description = StringField('Location description',
-                           validators=[DataRequired(), Length(min=1, max=80)])
+    description = StringField('Location description', validators=[DataRequired(), Length(min=1, max=500)])
     lookup_address = StringField('Search address')
 
     coord_latitude = HiddenField('Latitude',validators=[DataRequired()])
 
-    coord_longitude = HiddenField('Longitude', validators=[DataRequired()])  
-    ## add drop-down option with wtforms to and categories                   
+    coord_longitude = HiddenField('Longitude', validators=[DataRequired()]) 
+    category = SelectField(u'Category', choices=[('1', 'Secondhand Shop'),('2', 'Fairfashion Shop'),('3','Swap box/cupboard'),('4','Flea market')])                   
 
     submit = SubmitField('Create Location')
-

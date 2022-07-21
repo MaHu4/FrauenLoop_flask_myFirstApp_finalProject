@@ -11,30 +11,20 @@
       });
     </script>
 {% endblock %}
+
 {% block body %}
 <div id="container">
     <form method="POST" action="">
         {{ form.hidden_tag() }}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">New Location</legend>
+            <legend class="border-bottom mb-4">Add new location</legend>
             {% if form.coord_latitude.errors or  form.coord_longitude.errors %}
             <div class="alert alert-danger" role="alert">
                 Make sure to select a valid point in the map!
             </div>
             {% endif %}
-            <div class="form-group">
-                {{ form.description.label(class="form-control-label") }}
-                {% if form.description.errors %}
-                    {{ form.description(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.description.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.description(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
+
+            <!-- Search address -->
             <div class="form-group">
                 {{ form.lookup_address.label(class="form-control-label") }}
                 {% if form.lookup_address.errors %}
@@ -47,7 +37,33 @@
                 {% else %}
                 <small id="emailHelp" class="form-text text-muted">Use the search bar on the top-right of the map to find the address you want:</small>
                 {% endif %}
+
+            <!-- Drop Down Category-->        
             </div>
+            <!-- <legend class="border-bottom mb-4">Choose category for new location</legend> -->
+            <div class="form-group">  
+                {{ form.category.label(class="form-control-label")}}
+
+                {{form.category }}
+            </div>
+
+            <!-- Description field-->
+            <div class="form-group">
+                {{ form.description.label(class="form-control-label")}}
+                <!-- {{ form.description.label(rows='50',cols='100')}} -->
+                
+                {% if form.description.errors %}
+                    {{ form.description(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.description(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            
         </fieldset>
         <div id="preview" style="width: 100%; height: 400px">
             <div id="viewDiv"></div>
