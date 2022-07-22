@@ -63,7 +63,7 @@ class SampleLocation(db.Model):
 
     id = Column(Integer, primary_key=True)
     location_name = Column(String(50))
-    # shop_category =Column(String(choices))
+    shop_category =Column(String)
     description = Column(String(500))
     geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))
 

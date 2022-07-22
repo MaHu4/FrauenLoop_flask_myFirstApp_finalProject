@@ -6,12 +6,12 @@ import traceback
 from forms import NewLocationForm,  RegistrationForm, LoginForm
 from models import setup_db, SampleLocation, db_drop_and_create_all, User
 
-# from forms import RegistrationForm
-# from models import User
+from forms import RegistrationForm
+from models import User
 from sqlalchemy.exc import IntegrityError
 import hashlib
 
-# from forms import LoginForm
+from forms import LoginForm
 from flask_login import login_user, logout_user, login_required, current_user, login_manager, LoginManager
 
 
@@ -25,7 +25,7 @@ def create_app(test_config=None):
     app.config['SECRET_KEY'] = SECRET_KEY
 
     # """ uncomment at the first time running the app. Then comment back so you do not erase db content over and over """
-    db_drop_and_create_all()
+    # db_drop_and_create_all()
 
     # initialize a LoginManager at the app level
 

@@ -970,11 +970,13 @@ Add the @login_required annotation to the new_location route (the line in the mi
     - changed StringField to TextAreaField
 
     Added shop_category:
-    - added "category = form.category.data" to  @app.route("/new-location" in app.py
-    - added "SelectField" to "class NewLocationForm(FlaskForm)" in forms.py
-    - added "<div class="form-group">" "with {{form.shopCategory }}" in new-location.html
+    - in app.py: added "category = form.category.data" to  @app.route("/new-location"
+    - in forms.py: added "SelectField" to "class NewLocationForm(FlaskForm)"
+    - in new-location.htm:  added "<div class="form-group">" "with {{form.shopCategory }}" 
+    - in models.py:  added " shop_category =Column(String" in class SampleLocation and "'shop_category': self.shop_category" under method def to_dict(self)"
 
     Added location_name:
-    - added "shop_category = form.shop_category.data" to  @app.route("/new-location" in app.py
-    - added "StringField" to "class NewLocationForm(FlaskForm)" in forms.py
-    - added "<div class="form-group">" "with form.location_name...." (copy-paste from description field) in new-location.html
+    - in app.py: added "shop_category = form.shop_category.data" to  @app.route("/new-location" 
+    - in forms.py: added "StringField" to "class NewLocationForm(FlaskForm)" 
+    - in new-location.html: added "<div class="form-group">" "with form.location_name...." (copy-paste from description field) 
+    - in models.py:  added "location_name = Column(String(50))" in class SampleLocation and "'location_name': self.location_name,"  under method def to_dict(self)"
