@@ -140,7 +140,7 @@ function placeItemsInMap(items) {
           symbol: simpleMarkerSymbol,
           popupTemplate: {
             title: item.description,
-            content: "Here we could put more information about this item",
+            content: "Here we could put more information about this item", // need to be changed???
             actions: [{
               title: "View Details",
               id: "view",

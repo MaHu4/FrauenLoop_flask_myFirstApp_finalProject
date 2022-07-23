@@ -74,7 +74,7 @@ class NewLocationForm(FlaskForm):
     coord_longitude = HiddenField('Longitude', validators=[DataRequired()]) 
 
     location_name = StringField('Name of the location', validators=[DataRequired(), Length(min=1, max=50)])
-    shop_category = SelectField(u'Select shop category', choices=[('1', 'Secondhand store / boutique'),('2', 'Fairfashion store'),('3','Rental store for clothes'), ('4','Designer fashion store'),('5','Swap box / cupboard'),('6','Flea market for clothes'),('7','Tailor or shoe maker / repairer'),('8', 'Upcycling'),('9','Clothes donations'),('10','Eco laundry')])   
+    shop_category = SelectField(u'Select shop category', choices=[('1','Secondhand store / boutique'),('2', 'Fairfashion store'),('3','Rental store for clothes'), ('4','Designer fashion store'),('5','Swap box / cupboard'),('6','Flea market for clothes'),('7','Tailor or shoe maker / repairer'),('8', 'Upcycling'),('9','Clothes donations'),('10','Eco laundry')])     
     description = TextAreaField('Location description', validators=[DataRequired(), Length(min=1, max=500)])                
 
     submit = SubmitField('Create Location')

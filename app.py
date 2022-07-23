@@ -28,15 +28,9 @@ def create_app(test_config=None):
     # db_drop_and_create_all()
 
     # initialize a LoginManager at the app level
-
     login_manager = LoginManager(app)
     login_manager.login_view = 'login'
     login_manager.login_message_category = 'info'
-
-    # ## Landing Page
-    # @app.route("/")
-    # def landingpage():
-    #     return render_template('landing.html') 
 
 
     ## LOGIN
@@ -103,8 +97,6 @@ def create_app(test_config=None):
         return render_template('registration.html', form=form)   
 
     
-
-
     ## INTERACTIVE MAP 
 
     @app.route('/map', methods=['GET'])
@@ -158,9 +150,13 @@ def create_app(test_config=None):
             latitude = float(request.args.get('lat'))
             longitude = float(request.args.get('lng'))
             description = request.args.get('description')
+            location_name=request.args.get('location_name')
+            shop_category=request.args.get('shop_category')
 
             location = SampleLocation(
                 description=description,
+                location_name=location_name, # added
+                shop_category=shop_category, # added
                 geom=SampleLocation.point_representation(latitude=latitude, longitude=longitude)
             )   
             location.insert()
@@ -182,10 +178,9 @@ def create_app(test_config=None):
             latitude = float(request.args.get('lat'))
             longitude = float(request.args.get('lng'))
             radius = int(request.args.get('radius'))
-
-            # cat1 = string()
+            category = str(request.args.get('category')) #added
             
-            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius)
+            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius, category) # category added
             return jsonify(
                 {
                     "success": True,
@@ -196,6 +191,18 @@ def create_app(test_config=None):
             exc_type, exc_value, exc_traceback = sys.exc_info()
             app.logger.error(traceback.print_exception(exc_type, exc_value, exc_traceback, limit=2))
             abort(500)
+
+# Tried with: https://www.youtube.com/watch?v=_sgVt16Q4O4
+    # @app.route('/map/filter', methods=['GET', 'POST'])
+    # @login_required
+    # def filter():
+    #     if request.method == 'POST': 
+    #         print(request.form.getlist('mycheckbox'))
+    #         return 'Done'
+    #     return render_template(
+    #         'map.html', 
+    #          map_key=os.getenv('MAPS_API_KEY', 'MAPS_API_KEY_WAS_NOT_SET?!')
+    #         )
 
     @app.errorhandler(500)
     def server_error(error):
@@ -211,5 +218,3 @@ app = create_app()
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",5000))
     app.run(host='127.0.0.1',port=port,debug=True)
-
-

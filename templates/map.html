@@ -15,6 +15,8 @@
 {% endblock %}
 
 {% block body %}
+
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
   <a class="navbar-brand mb-0 h1" href="#"><img src="https://res.cloudinary.com/mahu/image/upload/ar_1:1,b_rgb:4c82d6,bo_1px_solid_rgb:ffffff,c_fill,g_auto,h_115,o_100,r_max,w_115/v1658145695/First%20Flask%20App/Logo_gpjfzv.jpg" class="img-fluid width: 80px height:auto" alt="Logo of the application"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,5 +54,50 @@
   </div>
 </nav>
 
-<div id="viewDiv"></div>
+<div class="row">
+  
+<!-- Map-->
+  <div id="viewDiv" class="col-6 col-sm-6 col-md-8 collg-8"></div>
+
+  <!-- SELECTFIELDS IN MAP -->
+  <div id="filterDiv" class="col-6 col-sm-6 col-md-4 collg-6">
+
+<form method= "POST" action="">
+  <input type="checkbox" value="1" name="mycheckbox"> Secondhand store
+  <br>
+  <input type="checkbox" value="2" name="mycheckbox"> Fairfashion store
+  <br>
+  <input type="checkbox" value="3" name="mycheckbox"> Rental store for clothes
+  <br>
+  <button class="btn btn-info my-2 my-sm-0" type="submit" onclick=searchAddressSubmit()>Filter</button>
+</form>
+
+  </div>
+
+  <!-- <div id="filterDiv" class="col-6 col-sm-6 col-md-4 collg-6">
+    <form action="" method="get">
+      <input type="checkbox" name="field" value="SECOND"> Secondhand store</input>
+      <br>
+      <input type="checkbox" name="field" value="FAIR"> Fairfashion store</input>
+      <br>
+      <input type="checkbox" name="field" value="RENTAL"> Rental store for clothes</input>
+      <br>
+      <input type="checkbox" name="field" value="DESIGNER"> Designer fashion store</input>
+      <br>
+      <input type="checkbox" name="field" value="SWAP"> Swap box / cupboard</input>
+      <br>
+      <input type="checkbox" name="field" value="FLEA"> Flea market for clothes</input>
+      <br>
+      <input type="checkbox" name="field" value="TAILOR"> Tailor or shoe maker / repaire</input>
+      <br>
+      <input type="checkbox" name="field" value="UP"> Upcycling</input>
+      <br>
+      <input type="checkbox" name="field" value="DONATION"> Clothes donations</input>
+      <br>
+      <input type="checkbox" name="field" value="ECO">  Eco laundry</input>
+      <br>
+    <input class="smallButton" type="submit" value="Filter">
+  </div> -->
+</div>
+
 {% endblock %}
