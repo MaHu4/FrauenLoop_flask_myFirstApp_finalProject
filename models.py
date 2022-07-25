@@ -1,6 +1,7 @@
 import os
 from random import choices
 from secrets import choice
+from unicodedata import category
 from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
 from geoalchemy2.types import Geometry
@@ -58,6 +59,23 @@ def insert_sample_locations():
 class SpatialConstants:
     SRID = 4326
 
+class ShopCategory(): 
+    def __init__(self, category, number):
+        self.category = category
+        self.number = number 
+
+
+all_categories = [
+    ShopCategory('Secondhand store / boutique', 1), # number needed because it doesn't change as identifiyer, while naming of category can change (also for different languages)
+    ShopCategory('Fairfashion store', 2),
+    ShopCategory('Rental store for clothes', 3)
+    ]
+
+
+
+
+# ({'1':'Secondhand store / boutique','2': 'Fairfashion store','3':'Rental store for clothes','4':'Designer fashion store','5':'Swap box / cupboard','6':'Flea market for clothes','7':'Tailor or shoe maker / repairer','8':'Upcycling','9':'Clothes donations','10':'Eco laundry'})
+
 class SampleLocation(db.Model):
     __tablename__ = 'sample_locations'
 
@@ -67,6 +85,9 @@ class SampleLocation(db.Model):
     description = Column(String(500))
     geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))
 
+    def category_description (self): 
+        # self ... start here for showing shop category in description 
+
     @staticmethod
     def point_representation(latitude, longitude):
         point = 'POINT(%s %s)' % (longitude, latitude)
@@ -74,7 +95,7 @@ class SampleLocation(db.Model):
         return wkb_element
 
     @staticmethod
-    def get_items_within_radius(lat, lng, radius):
+    def get_items_within_radius(lat, lng, radius, shop_category):
         """Return all sample locations within a given radius (in meters)"""
 
         #TODO: The arbitrary limit = 100 is just a quick way to make sure 

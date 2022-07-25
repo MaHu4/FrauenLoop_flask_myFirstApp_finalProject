@@ -140,7 +140,7 @@ function placeItemsInMap(items) {
           symbol: simpleMarkerSymbol,
           popupTemplate: {
             title: item.description,
-            content: "Here we could put more information about this item", // need to be changed???
+            content: "Here we could put more information about this item",  // need to be changed???
             actions: [{
               title: "View Details",
               id: "view",
@@ -150,7 +150,7 @@ function placeItemsInMap(items) {
       });
       graphicsLayer.add(pointGraphic);
 
-      // return pointGraphic;
+      return pointGraphic;
   });
 
   // this handles the click on "View Details"
@@ -196,9 +196,10 @@ function createCircle(latLng,radius, zoomLevel) {
 
 function searchAddressSubmit() {
   // Took bits and pieces from here for this feature: https://developers.arcgis.com/documentation/mapping-apis-and-services/search/geocoding/
+  console.log('searchAddressSubmit');
+
   const rawAddress = document.getElementById("search_address").value;
-  console.log("rawAddress: ", rawAddress)
-  console.log("rstiloca: ", esriLocator)
+
   const geocodingServiceUrl = "https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer";
 
   const params = {
@@ -207,51 +208,15 @@ function searchAddressSubmit() {
     }
   }
 
-  console.log("address----", params)
-  console.log("esrifunc: ", esriLocator.addressToLocations(geocodingServiceUrl, params))
   esriLocator.addressToLocations(geocodingServiceUrl, params).then((results) => {
     if (results.length) {
       let firstResult = results[0];
-      console.log("results: ", results)
-      console.log("firdtResult", firstResult.location)
       console.log(firstResult.address);
 
       view.goTo({
         target: firstResult.location,
-        zoom: 11
+        zoom: 13
       });
-      
-      // draw the location pointer   
-      const point = {
-            type: "point",
-            longitude: firstResult.location.longitude,
-            latitude: firstResult.location.latitude
-        };
-        const simpleMarkerSymbol = {
-            type: "simple-marker",
-            color: [255, 0, 0],  // Red
-            outline: {
-                color: [255, 255, 255], // White
-                width: 1
-            }
-        };
-        const pointGraphic = new cGraphic({
-            geometry: point,
-            symbol: simpleMarkerSymbol,
-            popupTemplate: {
-              title: "item.description",
-              content: "Here we could put more information about this item",
-              actions: [{
-                title: "View Details",
-                id: "view",
-                // param: item.id // this is an additional attribute I added to be able to know the item id and costruct the detail page url on click
-              }]
-            }
-        });
-        graphicsLayer.add(pointGraphic);
-  
-        // return pointGraphic;
-
     } else {
       console.log("Geocode was not successful");
       // If you want to provide feedback to the user on the map page:
@@ -259,7 +224,6 @@ function searchAddressSubmit() {
     } 
   });
 
-  console.log("end function")
   //prevent refresh
   return false;
 }

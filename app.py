@@ -178,9 +178,9 @@ def create_app(test_config=None):
             latitude = float(request.args.get('lat'))
             longitude = float(request.args.get('lng'))
             radius = int(request.args.get('radius'))
-            category = str(request.args.get('category')) #added
+            shop_category = str(request.args.get('category')) #added
             
-            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius, category) # category added
+            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius, shop_category) # category added
             return jsonify(
                 {
                     "success": True,
