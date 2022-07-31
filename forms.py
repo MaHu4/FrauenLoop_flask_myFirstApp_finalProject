@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 from wtforms import StringField, SubmitField, HiddenField, PasswordField, BooleanField
-from models import all_categories
+from models import all_shop_categories
 
 
 
@@ -67,8 +67,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('Sign up')  
 
 
-
-## NEW LOCATIION IN MAP
+## ADD NEW LOCATIION IN MAP
 
 class NewLocationForm(FlaskForm):
     lookup_address = StringField('Search address')
@@ -76,9 +75,7 @@ class NewLocationForm(FlaskForm):
     coord_longitude = HiddenField('Longitude', validators=[DataRequired()]) 
 
     location_name = StringField('Name of the location', validators=[DataRequired(), Length(min=1, max=50)])
-    shop_category = SelectField(u'Select shop category', choices = [( c.number, c.category) for c in all_categories]) # u = unicode String
-        
-        # ('1','Secondhand store / boutique'),('2', 'Fairfashion store'),('3','Rental store for clothes'), ('4','Designer fashion store'),('5','Swap box / cupboard'),('6','Flea market for clothes'),('7','Tailor or shoe maker / repairer'),('8', 'Upcycling'),('9','Clothes donations'),('10','Eco laundry')])     
+    shop_category = SelectField(u'Select shop category', choices = [(c.number, c.category) for c in all_shop_categories]) # u = unicode String   
     description = TextAreaField('Location description', validators=[DataRequired(), Length(min=1, max=500)])                
 
     submit = SubmitField('Create Location')

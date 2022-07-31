@@ -4,7 +4,7 @@ from flask import Flask, request, abort, jsonify, render_template, url_for, flas
 from flask_cors import CORS
 import traceback
 from forms import NewLocationForm,  RegistrationForm, LoginForm
-from models import setup_db, SampleLocation, db_drop_and_create_all, User
+from models import setup_db, SampleLocation, db_drop_and_create_all, User, all_shop_categories
 
 from forms import RegistrationForm
 from models import User
@@ -97,7 +97,7 @@ def create_app(test_config=None):
         return render_template('registration.html', form=form)   
 
     
-    ## INTERACTIVE MAP 
+    ## MAP 
 
     @app.route('/map', methods=['GET'])
     def map():
@@ -110,9 +110,11 @@ def create_app(test_config=None):
     def detail():
         location_id = float(request.args.get('id'))
         item = SampleLocation.query.get(location_id)
+
         return render_template(
             'detail.html', 
             item=item,
+            all_shop_categories=all_shop_categories, # added on 31.07
             map_key=os.getenv('MAPS_API_KEY', 'MAPS_API_KEY_WAS_NOT_SET?!')
         )            
 
@@ -180,7 +182,7 @@ def create_app(test_config=None):
             radius = int(request.args.get('radius'))
             shop_category = str(request.args.get('category')) #added
             
-            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius, shop_category) # category added
+            locations = SampleLocation.get_items_within_radius(latitude, longitude, radius, shop_category) # shop_category added
             return jsonify(
                 {
                     "success": True,
@@ -217,4 +219,4 @@ def create_app(test_config=None):
 app = create_app()
 if __name__ == '__main__':
     port = int(os.environ.get("PORT",5000))
-    app.run(host='127.0.0.1',port=port,debug=True)
+    app.run(host='127.0.0.1',port=5000,debug=True)

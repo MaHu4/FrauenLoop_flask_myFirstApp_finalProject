@@ -55,7 +55,6 @@ def insert_sample_locations():
     # )
     # loc1.insert()
 
-
 class SpatialConstants:
     SRID = 4326
 
@@ -64,29 +63,37 @@ class ShopCategory():
         self.category = category
         self.number = number 
 
+    # def get_shop_category (self): 
+    #     return self.category
 
-all_categories = [
+all_shop_categories = [
     ShopCategory('Secondhand store / boutique', 1), # number needed because it doesn't change as identifiyer, while naming of category can change (also for different languages)
     ShopCategory('Fairfashion store', 2),
-    ShopCategory('Rental store for clothes', 3)
-    ]
+    ShopCategory('Rental store for clothes', 3),
+    ShopCategory('Designer fashion store', 4),
+    ShopCategory('Swap box / cupboard', 5),
+    ShopCategory('Flea market for clothes', 6),
+    ShopCategory('Tailor or shoe maker / repairer', 7),
+    ShopCategory('Upcycling', 8),
+    ShopCategory('Clothes donations', 9),
+    ShopCategory('Eco laundry', 10)]
 
-
-
-
-# ({'1':'Secondhand store / boutique','2': 'Fairfashion store','3':'Rental store for clothes','4':'Designer fashion store','5':'Swap box / cupboard','6':'Flea market for clothes','7':'Tailor or shoe maker / repairer','8':'Upcycling','9':'Clothes donations','10':'Eco laundry'})
 
 class SampleLocation(db.Model):
     __tablename__ = 'sample_locations'
 
+    def get_shop_category(self, shop_categories):   # added on 31.07
+        for s in shop_categories:
+            if s.number == int(self.shop_category): 
+                return s
+
     id = Column(Integer, primary_key=True)
     location_name = Column(String(50))
-    shop_category =Column(String)
+    shop_category =Column(String) #can this me removed??
     description = Column(String(500))
     geom = Column(Geometry(geometry_type='POINT', srid=SpatialConstants.SRID))
 
-    def category_description (self): 
-        # self ... start here for showing shop category in description 
+    
 
     @staticmethod
     def point_representation(latitude, longitude):

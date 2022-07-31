@@ -2,7 +2,7 @@
 {% block body %}
     Name: {{item.location_name}}
     <br>
-    Shop category: {{item.shop_category}} 
+    Shop category: {{item.get_shop_category(all_shop_categories).category}}  <!--added on 31.07-->
     <br>
     Description: {{item.description}}
 {% endblock %}
